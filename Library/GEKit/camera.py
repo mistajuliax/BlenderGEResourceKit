@@ -49,21 +49,21 @@ def look(cont):
 		if logic.mouse.visible:
 			x = 0
 			y = 0
-	
+
 		# Smooth movement
 		x = (owner['oldX']*lookSmoothing + x*(1.0-lookSmoothing))
 		y = (owner['oldY']*lookSmoothing + y*(1.0-lookSmoothing))
-	
+
 		# use mouse clutching options
 		if (RClickToLook and logic.mouse.events[events.RIGHTMOUSE] == logic.KX_INPUT_ACTIVE)\
 			or \
 			(LClickToLook and logic.mouse.events[events.LEFTMOUSE] == logic.KX_INPUT_ACTIVE)\
 			or not (RClickToLook or LClickToLook):
-			
+
 			# apply the camera view transforms
 			owner.applyRotation([0, 0, x * lookSensitivity], False)
 			owner.applyRotation([y * lookSensitivity, 0, 0], True)
-			
+
 			# Center mouse in game window
 			mouse.position = (0.5,0.5)
 			logic.mouse.visible = False
@@ -75,7 +75,7 @@ def look(cont):
 		owner['oldX'] = x
 		owner['oldY'] = y
 
-		
+
 		# keyboard control
 		if keyboard[events.WKEY]:
 			owner.applyMovement([0,0,-walkSpeed], True)

@@ -12,7 +12,7 @@ ignored = shutil.ignore_patterns('__pycache__', '.git', '*.blend1', '*.blend2')
 def copyFiles(useZip):
 	startTime = time.time()
 	pwd = os.path.dirname(os.path.realpath(__file__))
-	print('Working directory: %s' % pwd)
+	print(f'Working directory: {pwd}')
 
 	print('Creating release folder', end='...')
 	sys.stdout.flush()
@@ -35,7 +35,7 @@ def copyFiles(useZip):
 		print('Zipping', end='...')
 		sys.stdout.flush()
 		shutil.make_archive(name, 'zip', 'BGERsourceKit')
-	
+
 	elapsedTime = time.time() - startTime
 	print('Completed in %d seconds' % elapsedTime)
 

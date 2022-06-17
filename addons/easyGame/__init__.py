@@ -88,7 +88,7 @@ class BLEasyMaterial(GamePanel, bpy.types.Panel):
 			# edit albedo
 			row = layout.row()
 			row.prop(mat, 'diffuse_intensity', text='Albedo')
-	
+
 			metallicTextureSlot = None
 			for textureSlot in mat.texture_slots:
 				if textureSlot:
@@ -102,7 +102,7 @@ class BLEasyMaterial(GamePanel, bpy.types.Panel):
 						text = tex.name.split('.')[-2]
 
 					# move to advanced section
-					if text == 'Emit' or text == 'Alpha':
+					if text in ['Emit', 'Alpha']:
 						continue						
 
 					row = layout.row()
@@ -116,10 +116,10 @@ class BLEasyMaterial(GamePanel, bpy.types.Panel):
 					row.active = textureSlot.use
 					row.template_ID(tex, "image", open="image.open")
 					split  = layout.split(percentage=0.20)
-					
+
 					# empty
 					row = split.row()
-					
+
 					split.active = textureSlot.use
 					# additional properties
 					if text == 'Col':
@@ -140,7 +140,7 @@ class BLEasyMaterialAdv(GamePanel, bpy.types.Panel):
 	bl_category = "Easy Material"
 
 	@classmethod
-	def poll(self, context):
+	def poll(cls, context):
 		return context.active_object
 
 	def draw(self, context):
@@ -159,11 +159,11 @@ class BLEasyMaterialAdv(GamePanel, bpy.types.Panel):
 			# bail code
 			if not mat:
 				continue
-			
+
 			if 'uberMaterial' not in mat:
 				# row.label('Not an UberMaterial', icon='ERROR')
 				continue
-			
+
 			row.prop(mat, 'use_transparency', 'Transparent')
 			if mat.use_transparency:
 				row.prop(mat, 'transparency_method', expand=True)
@@ -181,8 +181,8 @@ class BLEasyMaterialAdv(GamePanel, bpy.types.Panel):
 					text = tex.name.split('.')[-1]
 					if text.isnumeric():
 						text = tex.name.split('.')[-2]
-					
-					if text != 'Emit' and text!= 'Alpha':
+
+					if text not in ['Emit', 'Alpha']:
 						continue
 
 					# enable/disable texture channel
@@ -192,14 +192,14 @@ class BLEasyMaterialAdv(GamePanel, bpy.types.Panel):
 					# image browse control
 					split.template_ID(tex, "image", open="image.open")
 					split  = layout.split(percentage=0.20)
-					
+
 					# empty
 					row = split.row()
 
 					# additional properties
 					if text == 'Emit':
 						split.prop(textureSlot, 'emit_factor', text='Factor')
-					
+
 					if textureSlot.texture_coords == 'UV' and tex.image:
 						split.prop_search(textureSlot, "uv_layer", context.active_object.data, "uv_textures", text="")
 
@@ -235,14 +235,14 @@ class BLEasyAsset(GamePanel, bpy.types.Panel):
 		col.operator("easy.assetcreate", text='Barrel-Red').arg = 'barrel.BarrelOilRed'
 		col.operator("easy.assetcreate", text='Barrel-Red-Yellow').arg = 'barrel.BarrelOilRed2'
 		col.operator("easy.assetcreate", text='Barrel-Galvanized').arg = 'barrel.BarrelOilGalvanized'
-		
+
 		col = layout.column(align=True)
 		col.operator("easy.assetcreate", text='Concrete-Divider').arg = 'concrete.ConcreteDivider'
 		col.operator("easy.assetcreate", text='Concrete-Block1').arg = 'concrete.ConcreteBlock1'
 		col.operator("easy.assetcreate", text='Concrete-Block2').arg = 'concrete.ConcreteBlock2'
 		col.operator("easy.assetcreate", text='Concrete-Block3').arg = 'concrete.ConcreteBlock3'
 		row = layout.row()
-		
+
 		row.label('Effects')
 		col = layout.column(align=True)
 		col.operator("easy.assetcreate", text='Plane Mirror').arg = 'fx.mirror'
@@ -274,14 +274,13 @@ class BLEasyMaterialCreate(bpy.types.Operator):
 	MatName = bpy.props.StringProperty(name='Material Name', default='uber')
 
 	def execute(self, context):
-		error = easyMaterial.sanityCheck(context)
-		if not error:
+		if error := easyMaterial.sanityCheck(context):
+			self.report({'ERROR'}, error)
+			return {'CANCELLED'}
+		else:
 			mat = easyMaterial.createMaterial(context, self.MatName)
 			easyMaterial.assignMaterial(context, mat)
 			return {'FINISHED'}
-		else:
-			self.report({'ERROR'}, error)
-			return {'CANCELLED'}
 
 
 class BLEasyAssetCreate(bpy.types.Operator):
@@ -293,7 +292,7 @@ class BLEasyAssetCreate(bpy.types.Operator):
 	arg = bpy.props.StringProperty()
 	
 	def execute(self, context):
-		
+
 		objType, option = self.arg.split('.')
 
 		# cleanup before we start

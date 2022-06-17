@@ -18,8 +18,7 @@ def loop():
 	if keyboard[events.ACCENTGRAVEKEY] == logic.KX_SENSOR_JUST_DEACTIVATED:
 		from pprint import pprint
 		import code
-		namespace = globals().copy()
-		namespace.update(locals())
+		namespace = globals() | locals()
 		code.interact(local=namespace)
 
 

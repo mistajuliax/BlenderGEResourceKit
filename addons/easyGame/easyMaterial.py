@@ -26,7 +26,7 @@ def createMaterial(context, name):
 	mat.specular_ior = 10.0
 
 	# color map
-	tex = bpy.data.textures.new(name+'.Col', type = 'IMAGE')
+	tex = bpy.data.textures.new(f'{name}.Col', type = 'IMAGE')
 	tex.use_alpha = False
 	mtex = mat.texture_slots.add()
 	mtex.texture = tex
@@ -35,7 +35,7 @@ def createMaterial(context, name):
 	mtex.use_map_color_diffuse = True 
 
 	# normal map
-	tex = bpy.data.textures.new(name+'.Nor', type = 'IMAGE')
+	tex = bpy.data.textures.new(f'{name}.Nor', type = 'IMAGE')
 	tex.use_alpha = False
 	tex.use_normal_map = True
 	mtex = mat.texture_slots.add()
@@ -46,7 +46,7 @@ def createMaterial(context, name):
 	mtex.use_map_color_diffuse = False
 
 	# alpha map
-	tex = bpy.data.textures.new(name+'.Alpha', type = 'IMAGE')
+	tex = bpy.data.textures.new(f'{name}.Alpha', type = 'IMAGE')
 	mtex = mat.texture_slots.add()
 	mtex.texture = tex
 	mtex.texture_coords = 'UV'
@@ -54,10 +54,10 @@ def createMaterial(context, name):
 	mtex.use_map_color_diffuse = False
 	mtex.use_map_alpha = True
 	mtex.use = False
-	
+
 
 	# emit map
-	tex = bpy.data.textures.new(name+'.Emit', type = 'IMAGE')
+	tex = bpy.data.textures.new(f'{name}.Emit', type = 'IMAGE')
 	tex.use_alpha = False
 	mtex = mat.texture_slots.add()
 	mtex.texture = tex
@@ -68,7 +68,7 @@ def createMaterial(context, name):
 	mtex.use = False
 
 	# light map
-	tex = bpy.data.textures.new(name+'.AO', type = 'IMAGE')
+	tex = bpy.data.textures.new(f'{name}.AO', type = 'IMAGE')
 	tex.use_alpha = False
 	mtex = mat.texture_slots.add()
 	mtex.texture = tex
@@ -78,7 +78,7 @@ def createMaterial(context, name):
 	mtex.use_map_color_spec = True
 
 	# spec map (gloss map with color)
-	specTexture = bpy.data.textures.new(name+'.Gloss', type = 'IMAGE')
+	specTexture = bpy.data.textures.new(f'{name}.Gloss', type = 'IMAGE')
 	specTexture.use_alpha = False
 	mtex = mat.texture_slots.add()
 	mtex.texture = specTexture
@@ -97,7 +97,7 @@ def createMaterial(context, name):
 	mtex.use_map_color_diffuse = False
 	mtex.use_map_specular = True
 	mtex.specular_factor = 2.0
-	mtex.use_map_hardness = True 
+	mtex.use_map_hardness = True
 	mtex.hardness_factor = 2.0
 	mtex.use_rgb_to_intensity = True
 	mtex.use_stencil = True
@@ -105,7 +105,7 @@ def createMaterial(context, name):
 	mtex.color = [1,1,1]
 
 	# reflection map
-	tex = bpy.data.textures.new(name+'.Env', type = 'IMAGE')
+	tex = bpy.data.textures.new(f'{name}.Env', type = 'IMAGE')
 	tex.use_alpha = False
 	mtex = mat.texture_slots.add()
 	mtex.texture = tex
@@ -133,6 +133,5 @@ def sanityCheck(context):
 		for mat in obj.data.materials:
 			if mat:
 				return False
-				return 'Object already has materials, Aborted.'
 	return False
 

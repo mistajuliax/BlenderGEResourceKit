@@ -106,20 +106,16 @@ def createFX(option):
 
 
 def createBarrel(option):
-	obj = loadAsset('barrels.blend', (option))
-	return obj
+	return loadAsset('barrels.blend', (option))
 
 
 def createConcrete(option):
-	obj = loadAsset('concrete.blend', (option))
-	return obj
+	return loadAsset('concrete.blend', (option))
 
 
 def checkExists(name):
-	for obj in bpy.context.scene.objects:
-		if name in obj.name:
-			return obj
-	return False
+	return next((obj for obj in bpy.context.scene.objects if name in obj.name),
+	            False)
 
 
 def loadAsset(filename, objList):
@@ -157,7 +153,7 @@ def makeLogicBrick(obj, s, c, a, pulse=True):
 		sensor.use_pulse_true_level = pulse
 		sensor.link(controller)
 		sensorsList.append(sensor)	
-	
+
 	# add actuators
 	if type(a) is str: a = [a]
 	for i in a:
